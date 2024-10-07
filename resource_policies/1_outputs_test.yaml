@@ -1,0 +1,39 @@
+name: Expenses test suite
+description: Tests for verifying the expense resource policy
+options:
+  now: "2022-09-21T14:51:03.741Z"
+
+tests:
+  - name: Finance Role approvals
+    input:
+      principals:
+        - frank
+        - derek
+      resources:
+        - expense1
+        - expense2
+        - expense3
+        - expense4
+        - expense5
+      actions:
+        - approve
+    expected:        
+      - principal: frank
+        resource: expense2
+        actions:
+          approve: EFFECT_DENY
+        outputs:
+          - action: approve
+            expected: 
+              - src: "resource.expense.vdefault#rule-008"
+                val: {"amount":12000,"message":"Finance team membersz can only approve up to $10,000","principal":"frank","resource":"expense3"}
+      - principal: frank
+        resource: expense3
+        actions:
+          approve: EFFECT_DENY
+        outputs:
+          - action: approve
+            expected: 
+              - src: "resource.expense.vdefault#rule-008"
+                val: {"amount":12000,"message":"Finance team membersz can only approve up to $10,000","principal":"frank","resource":"expense3"}
+   
